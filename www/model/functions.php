@@ -137,3 +137,20 @@ function is_valid_upload_image($image){
 function h($str){
   return htmlspecialchars($str,ENT_QUOTES,'UTF-8');
 }
+function xss($data){
+  if(is_array($data)){
+    $_data = array();
+    foreach($data as $key => $value){
+      if(is_array($value)){
+        $key = htmlspecialchars($key,ENT_QUOTES,'UTF-8');
+        $_data[$key] = xss($value);
+      }else{
+        $key = htmlspecialchars($key,ENT_QUOTES,'UTF-8');
+        $_data[$key] = htmlspecialchars($value,ENT_QUOTES,'UTF-8');
+      }
+    }
+    return $_data;
+  }else{
+    return htmlspecialchars($data,ENT_QUOTES,'UTF-8');
+  }
+}
