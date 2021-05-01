@@ -16,8 +16,9 @@ $user = get_login_user($db);
 
 $cart_id = get_post('cart_id');
 $amount = get_post('amount');
+$token = get_post('token');
 
-if(update_cart_amount($db, $cart_id, $amount)){
+if(update_cart_amount($db, $cart_id, $amount) && is_valid_csrf_token($token) === true){
   set_message('購入数を更新しました。');
 } else {
   set_error('購入数の更新に失敗しました。');
