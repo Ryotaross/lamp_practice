@@ -142,15 +142,38 @@ function xss($data){
     $_data = array();
     foreach($data as $key => $value){
       if(is_array($value)){
-        $key = htmlspecialchars($key,ENT_QUOTES,'UTF-8');
+        if(preg_match('/^[0-9]+$/',$key) !== false){
+          $key = h($key);
+        }
         $_data[$key] = xss($value);
       }else{
-        $key = htmlspecialchars($key,ENT_QUOTES,'UTF-8');
-        $_data[$key] = htmlspecialchars($value,ENT_QUOTES,'UTF-8');
+        if(preg_match('/^[0-9]+$/',$key) !== false){
+          $key = h($key);
+        }
+        if(preg_match('/^[0-9]+$/',$key) !== false){
+          $_data[$key] = h($value);
+        }
       }
     }
     return $_data;
   }else{
     return htmlspecialchars($data,ENT_QUOTES,'UTF-8');
   }
+}
+// トークンの生成
+function get_csrf_token(){
+  // get_random_string()はユーザー定義関数。
+  $token = get_random_string(30);
+  // set_session()はユーザー定義関数。
+  set_session('csrf_token', $token);
+  return $token;
+}
+
+// トークンのチェック
+function is_valid_csrf_token($token){
+  if($token === '') {
+    return false;
+  }
+  // get_session()はユーザー定義関数
+  return $token === get_session('csrf_token');
 }
