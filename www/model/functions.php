@@ -142,24 +142,35 @@ function xss($data){
     $_data = array();
     foreach($data as $key => $value){
       if(is_array($value)){
-        if(preg_match('/^[0-9]+$/',$key) !== false){
+        if(is_numeric($key) === false){
           $key = h($key);
+        }else{
+          $key = $key;
         }
         $_data[$key] = xss($value);
       }else{
-        if(preg_match('/^[0-9]+$/',$key) !== false){
+        if(is_numeric($key) === false){
           $key = h($key);
+        }else{
+          $key = $key;
         }
-        if(preg_match('/^[0-9]+$/',$key) !== false){
+        if(is_numeric($value) === false){
           $_data[$key] = h($value);
+        }else{
+          $_data[$key] = $value;
         }
       }
     }
     return $_data;
   }else{
-    return htmlspecialchars($data,ENT_QUOTES,'UTF-8');
+    if(is_numeric($data) === false){
+      return h($data);
+    }else{
+      return $data;
+    }
   }
 }
+
 // トークンの生成
 function get_csrf_token(){
   // get_random_string()はユーザー定義関数。

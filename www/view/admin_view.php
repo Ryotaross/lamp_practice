@@ -9,12 +9,9 @@
   <?php 
   include VIEW_PATH . 'templates/header_logined.php'; 
   ?>
-
   <div class="container">
     <h1>商品管理</h1>
-
     <?php include VIEW_PATH . 'templates/messages.php'; ?>
-
     <form 
       method="post" 
       action="admin_insert_item.php" 
@@ -80,8 +77,7 @@
             <td>
 
               <form method="post" action="admin_change_status.php" class="operation">
-              <!-- if(is_open($cart) === true) -->
-                <?php if($item['status'] === '1'){ ?>
+                <?php if(is_open($item) === true){ ?>
                   <input type="submit" value="公開 → 非公開" class="btn btn-secondary">
                   <input type="hidden" name="changes_to" value="close">
                 <?php } else { ?>
