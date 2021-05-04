@@ -16,13 +16,14 @@ function get_db_connect(){
   return $dbh;
 }
 
-function fetch_query($db, $sql, $params = array()){
+function fetch_query($db, $sql, $bind,$params = array()){
   try{
     $statement = $db->prepare($sql);
-    $statement->execute($params);
+    bindV($bind,$statement);
+    $statement->execute();
     return $statement->fetch();
   }catch(PDOException $e){
-    set_error('データ取得に失敗しました。');
+    set_error('データ取得に失敗しました。' . $e);
   }
   return false;
 }
@@ -38,12 +39,23 @@ function fetch_all_query($db, $sql, $params = array()){
   return false;
 }
 
-function execute_query($db, $sql, $params = array()){
+function execute_query($db, $sql, $bind ,$params = array()){
   try{
     $statement = $db->prepare($sql);
-    return $statement->execute($params);
+    bindV($bind,$statement);
+    return $statement->execute();
   }catch(PDOException $e){
     set_error('更新に失敗しました。');
   }
   return false;
+}
+function bindV($bind,$statement){
+  if(is_array($bind)){
+    for($i = 0; $i < count($bind); $i++){
+       $statement->bindValue($i + 1,$bind[$i],PDO::PARAM_STR);
+    }
+  }else {
+      $statement->bindValue(1,$bind,PDO::PARAM_STR);
+  }
+  
 }

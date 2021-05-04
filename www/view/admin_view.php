@@ -79,7 +79,8 @@
             <td>
 
               <form method="post" action="admin_change_status.php" class="operation">
-                <?php if(is_open($item) === true){ ?>
+              <!-- if(is_open($cart) === true) -->
+                <?php if($item['status'] === '1'){ ?>
                   <input type="submit" value="公開 → 非公開" class="btn btn-secondary">
                   <input type="hidden" name="changes_to" value="close">
                 <?php } else { ?>
