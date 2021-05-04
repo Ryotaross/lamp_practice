@@ -13,12 +13,13 @@ $name = get_post('name');
 $password = get_post('password');
 $password_confirmation = get_post('password_confirmation');
 $hash = password_hash($password, PASSWORD_DEFAULT);
+$token = get_post('token');
 
 $db = get_db_connect();
 
 try{
   $result = regist_user($db, $name, $password, $password_confirmation,$hash);
-  if( $result=== false){
+  if( $result=== false || is_valid_csrf_token($token) === false){
     set_error('ユーザー登録に失敗しました。');
     redirect_to(SIGNUP_URL);
   }
