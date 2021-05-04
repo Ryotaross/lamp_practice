@@ -98,11 +98,11 @@ function delete_cart($db, $cart_id){
     DELETE FROM
       carts
     WHERE
-      cart_id = ?
+      cart_id = '{$cart_id}'
     LIMIT 1
   ";
 
-  return execute_query($db, $sql, $cart_id);
+  return execute_query($db, $sql);
 }
 
 function purchase_carts($db, $carts){
@@ -127,10 +127,10 @@ function delete_user_carts($db, $user_id){
     DELETE FROM
       carts
     WHERE
-      user_id = ?
+      user_id = '{$user_id}'
   ";
 
-  execute_query($db, $sql, $user_id);
+  execute_query($db, $sql);
 }
 
 
@@ -149,7 +149,7 @@ function validate_cart_purchase($carts){
   }
   foreach($carts as $cart){
     //if(is_open($cart) === false){
-    if($cart['status'] === '0'){
+    if(is_open($cart) === false){
       set_error($cart['name'] . 'は現在購入できません。');
     }
     if($cart['stock'] - $cart['amount'] < 0){
