@@ -37,6 +37,51 @@ function get_items($db, $is_open = false){
   if($is_open === true){
     $sql .= '
       WHERE status = 1
+      ORDER BY created DESC
+    ';
+  }
+
+  return fetch_all_query($db, $sql);
+}
+
+function get_low_cost_items($db, $is_open = false){
+  $sql = '
+    SELECT
+      item_id, 
+      name,
+      stock,
+      price,
+      image,
+      status
+    FROM
+      items
+  ';
+  if($is_open === true){
+    $sql .= '
+      WHERE status = 1
+      ORDER BY price ASC
+    ';
+  }
+
+  return fetch_all_query($db, $sql);
+}
+
+function get_high_cost_items($db, $is_open = false){
+  $sql = '
+    SELECT
+      item_id, 
+      name,
+      stock,
+      price,
+      image,
+      status
+    FROM
+      items
+  ';
+  if($is_open === true){
+    $sql .= '
+      WHERE status = 1
+      ORDER BY price DESC
     ';
   }
 
@@ -47,8 +92,14 @@ function get_all_items($db){
   return get_items($db);
 }
 
-function get_open_items($db){
-  return get_items($db, true);
+function get_open_items($db,$sort){
+  if($sort === 'low_cost'){
+    return get_low_cost_items($db, true);
+  }else if($sort === 'high_cost'){
+    return get_high_cost_items($db, true);
+  }else{
+    return get_items($db, true);
+  }
 }
 
 function regist_item($db, $name, $price, $stock, $status, $image){
