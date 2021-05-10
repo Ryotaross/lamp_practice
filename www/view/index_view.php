@@ -11,7 +11,6 @@
   
 
   <div class="container">
-  <?php print $count_page;?>
   <form method="get">
     <select name="sort">
       <option value="new">新着順</option>
@@ -53,7 +52,6 @@
     </div>
     <?php if($count_page > 1){?>
       <nav aria-label="Page navigation example">
-      <form method="get">
         <ul class="pagination">
           <li class="page-item">
             <a class="page-link" href="#" aria-label="Previous">
@@ -62,7 +60,7 @@
             </a>
           </li>
           <?php for($i = 1; $i <= $count_page; $i++){?>
-            <li class="page-item"><input type="submit" name="page" value="<?php print $i;?>"></li>
+            <li class="page-item"><a class="page-link" href="index.php?sort=<?php print $sort;?>&page=<?php print $i;?>"><?php print $i;?></a></li>
           <?php } ?>
           <li class="page-item">
             <a class="page-link" href="#" aria-label="Next">
@@ -71,9 +69,7 @@
             </a>
           </li>
         </ul>
-      </form>
     </nav>
-
     <?php } ?>
   </div>
   

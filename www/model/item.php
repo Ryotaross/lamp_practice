@@ -63,7 +63,7 @@ function get_new_items($db,$page, $is_open = false){
   if($page > 1){
     $page = ($page - 1) * 8;
     $sql .= '
-      LIMIT {$page},8
+      LIMIT 8,8
     ';
   }else{
     $sql .= '
@@ -95,7 +95,7 @@ function get_low_cost_items($db,$page, $is_open = false){
   if($page > 1){
     $page = ($page - 1) * 8;
     $sql .= '
-      LIMIT {$page},8
+      LIMIT 8,8
     ';
   }else{
     $sql .= '
@@ -127,7 +127,7 @@ function get_high_cost_items($db,$page, $is_open = false){
   if($page > 1){
     $page = ($page - 1) * 8;
     $sql .= '
-      LIMIT {$page},8
+      LIMIT 8,8
     ';
   }else{
     $sql .= '

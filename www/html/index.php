@@ -18,7 +18,7 @@ $user = get_login_user($db);
 $token = get_csrf_token();
 $sort = get_get('sort');
 $count_page = get_item_count($db);
-$page = get_get('page');
+$page = intval(get_get('page'));
 
 $items = get_open_items($db,$sort,$page);
 
