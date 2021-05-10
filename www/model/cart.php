@@ -2,6 +2,8 @@
 require_once MODEL_PATH . 'functions.php';
 require_once MODEL_PATH . 'db.php';
 require_once MODEL_PATH . 'item.php';
+require_once MODEL_PATH . 'history.php';
+require_once MODEL_PATH . 'detail.php';
 
 function get_user_carts($db, $user_id){
   $sql = "
@@ -105,21 +107,33 @@ function delete_cart($db, $cart_id){
   return execute_query($db, $sql);
 }
 
-function purchase_carts($db, $carts){
+function purchase_carts($db, $carts, $user_id){
   if(validate_cart_purchase($carts) === false){
     return false;
   }
-  foreach($carts as $cart){
-    if(update_item_stock(
-        $db, 
-        $cart['item_id'], 
-        $cart['stock'] - $cart['amount']
-      ) === false){
-      set_error($cart['name'] . 'の購入に失敗しました。');
+  $db->beginTransaction();
+  try{
+    insert_history($db,$user_id);
+    $history_id = get_order_id($db,$user_id);
+    foreach($carts as $cart){
+      if(update_item_stock(
+          $db, 
+          $cart['item_id'], 
+          $cart['stock'] - $cart['amount']
+        ) === false){
+          set_error($cart['name'] . 'の購入に失敗しました。');
+        }
+        if(insert_detail($db,$cart['item_id'],$cart['name'],$cart['price'],$cart['amount'],$history_id['order_id']) === false){
+          set_error($cart['name'] . 'の購入に失敗しました。');
+      }
     }
+    delete_user_carts($db, $carts[0]['user_id']);
+    $db->commit();
+  }catch(PDOException $e){
+    $db->rollBack();
+    throw $e;
   }
-  
-  delete_user_carts($db, $carts[0]['user_id']);
+
 }
 
 function delete_user_carts($db, $user_id){
@@ -148,7 +162,6 @@ function validate_cart_purchase($carts){
     return false;
   }
   foreach($carts as $cart){
-    //if(is_open($cart) === false){
     if(is_open($cart) === false){
       set_error($cart['name'] . 'は現在購入できません。');
     }

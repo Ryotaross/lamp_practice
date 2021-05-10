@@ -17,7 +17,7 @@ $user = get_login_user($db);
 $carts = get_user_carts($db, $user['user_id']);
 $token = get_post('token');
 
-if(purchase_carts($db, $carts) === false && is_valid_csrf_token($token) === true){
+if(purchase_carts($db, $carts, $user['user_id']) === false && is_valid_csrf_token($token) === true){
   set_error('商品が購入できませんでした。');
   redirect_to(CART_URL);
 } 
