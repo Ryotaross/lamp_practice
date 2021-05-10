@@ -37,6 +37,7 @@ function get_items($db, $is_open = false){
   if($is_open === true){
     $sql .= '
       WHERE status = 1
+      ORDER BY created DESC
     ';
   }
 
