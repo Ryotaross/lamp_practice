@@ -43,8 +43,39 @@ function get_items($db, $is_open = false){
 
   return fetch_all_query($db, $sql);
 }
+function get_new_items($db,$page, $is_open = false){
+  $sql = '
+    SELECT
+      item_id, 
+      name,
+      stock,
+      price,
+      image,
+      status
+    FROM
+      items
+  ';
+  if($is_open === true){
+    $sql .= '
+      WHERE status = 1
+      ORDER BY created DESC
+    ';
+  }
+  if($page > 1){
+    $page = ($page - 1) * 8;
+    $sql .= "
+      LIMIT {$page},8
+    ";
+  }else{
+    $sql .= '
+      LIMIT 8
+    ';
+    
+  }
+  return fetch_all_query($db, $sql);
+}
 
-function get_low_cost_items($db, $is_open = false){
+function get_low_cost_items($db,$page, $is_open = false){
   $sql = '
     SELECT
       item_id, 
@@ -62,11 +93,21 @@ function get_low_cost_items($db, $is_open = false){
       ORDER BY price ASC
     ';
   }
+  if($page > 1){
+    $page = ($page - 1) * 8;
+    $sql .= "
+      LIMIT {$page},8
+    ";
+  }else{
+    $sql .= '
+      LIMIT 8
+    ';
+  }
 
   return fetch_all_query($db, $sql);
 }
 
-function get_high_cost_items($db, $is_open = false){
+function get_high_cost_items($db,$page, $is_open = false){
   $sql = '
     SELECT
       item_id, 
@@ -84,21 +125,48 @@ function get_high_cost_items($db, $is_open = false){
       ORDER BY price DESC
     ';
   }
+  if($page > 1){
+    $page = ($page - 1) * 8;
+    $sql .= "
+      LIMIT {$page},8
+    ";
+  }else{
+    $sql .= '
+      LIMIT 8
+    ';
+  }
 
   return fetch_all_query($db, $sql);
+}
+function get_count($db){
+  $sql = "
+    SELECT
+      count(item_id)
+    FROM
+      items
+    WHERE
+      status = 1;
+  ";
+
+  return fetch_query($db, $sql);
 }
 
 function get_all_items($db){
   return get_items($db);
 }
 
-function get_open_items($db,$sort){
+function get_item_count($db){
+  $count =  get_count($db);
+  return floor($count["count(item_id)"] / 8) + 1;
+}
+
+function get_open_items($db,$sort,$page){
   if($sort === 'low_cost'){
-    return get_low_cost_items($db, true);
+    return get_low_cost_items($db,$page, true);
   }else if($sort === 'high_cost'){
-    return get_high_cost_items($db, true);
+    return get_high_cost_items($db,$page, true);
   }else{
-    return get_items($db, true);
+    return get_new_items($db,$page, true);
   }
 }
 
