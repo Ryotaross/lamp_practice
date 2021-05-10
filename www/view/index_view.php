@@ -8,7 +8,6 @@
 </head>
 <body>
   <?php include VIEW_PATH . 'templates/header_logined.php'; ?>
-  
 
   <div class="container">
   <form method="get">
@@ -53,21 +52,25 @@
     <?php if($count_page > 1){?>
       <nav aria-label="Page navigation example">
         <ul class="pagination">
-          <li class="page-item">
-            <a class="page-link" href="#" aria-label="Previous">
-              <span aria-hidden="true">&laquo;</span>
-              <span class="sr-only">Previous</span>
-            </a>
-          </li>
+          <?php if($page > 1){?>
+            <li class="page-item">
+              <a class="page-link" href="index.php?sort=<?php print $sort;?>&page=<?php print $page - 1;?>" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+                <span class="sr-only">Previous</span>
+              </a>
+            </li>
+          <?php } ?>
           <?php for($i = 1; $i <= $count_page; $i++){?>
             <li class="page-item"><a class="page-link" href="index.php?sort=<?php print $sort;?>&page=<?php print $i;?>"><?php print $i;?></a></li>
           <?php } ?>
+          <?php if($count_page > $page){?>
           <li class="page-item">
-            <a class="page-link" href="#" aria-label="Next">
+            <a class="page-link" href="index.php?sort=<?php print $sort;?>&page=<?php print $page + 1;?>" aria-label="Next">
               <span aria-hidden="true">&raquo;</span>
               <span class="sr-only">Next</span>
             </a>
           </li>
+          <?php } ?>
         </ul>
     </nav>
     <?php } ?>
