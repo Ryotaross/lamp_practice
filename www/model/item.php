@@ -62,9 +62,9 @@ function get_new_items($db,$page, $is_open = false){
   }
   if($page > 1){
     $page = ($page - 1) * 8;
-    $sql .= '
-      LIMIT 8,8
-    ';
+    $sql .= "
+      LIMIT {$page},8
+    ";
   }else{
     $sql .= '
       LIMIT 8
@@ -94,9 +94,9 @@ function get_low_cost_items($db,$page, $is_open = false){
   }
   if($page > 1){
     $page = ($page - 1) * 8;
-    $sql .= '
-      LIMIT 8,8
-    ';
+    $sql .= "
+      LIMIT {$page},8
+    ";
   }else{
     $sql .= '
       LIMIT 8
@@ -126,9 +126,9 @@ function get_high_cost_items($db,$page, $is_open = false){
   }
   if($page > 1){
     $page = ($page - 1) * 8;
-    $sql .= '
-      LIMIT 8,8
-    ';
+    $sql .= "
+      LIMIT {$page},8
+    ";
   }else{
     $sql .= '
       LIMIT 8
