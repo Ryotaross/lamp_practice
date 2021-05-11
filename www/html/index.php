@@ -21,5 +21,6 @@ $count_page = get_item_count($db);
 $page = intval(get_get('page'));
 
 $items = get_open_items($db,$sort,$page);
+$ranks = get_rank_items($db);
 
 include_once VIEW_PATH . 'index_view.php';

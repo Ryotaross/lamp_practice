@@ -74,6 +74,12 @@
         </ul>
     </nav>
     <?php } ?>
+    <ul class="list-group list-group-flush">
+    <li class="list-group-item">人気ランキング</li>
+      <?php for($i = 0;$i < 3;$i++){?>
+        <li class="list-group-item"><?php print $i + 1;?>位　<?php print $ranks[$i]['name'];?></li>
+      <?php } ?>
+    </ul>
   </div>
   
 </body>

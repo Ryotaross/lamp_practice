@@ -150,6 +150,26 @@ function get_count($db){
   return fetch_query($db, $sql);
 }
 
+function get_rank_items($db){
+  $sql = '
+    SELECT
+      items.name
+    FROM
+      items
+    INNER JOIN
+      details
+    ON
+      items.item_id = details.item_id
+    GROUP BY
+      details.item_id
+    ORDER BY
+      sum(details.quentity) desc
+    LIMIT 3
+  ';
+
+  return fetch_all_query($db, $sql);
+}
+
 function get_all_items($db){
   return get_items($db);
 }
